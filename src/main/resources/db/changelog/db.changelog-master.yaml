@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/changes/create-schema.sql
+  - include:
+      file: classpath:/db/changelog/changes/create-sequence.sql
+  - include:
+      file: classpath:/db/changelog/changes/create-table-basic-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/create-table-user-details.sql
