@@ -30,3 +30,11 @@ SET SCHEMA expenses_tracker;
 ALTER TABLE currency_details ADD CONSTRAINT IF NOT EXISTS fk_basic_id_currency_details FOREIGN KEY (basic_id) REFERENCES basic_details(basic_id);
 -- rollback SET SCHEMA expenses_tracker;
 -- rollback ALTER TABLE currency_details DROP CONSTRAINT IF EXISTS fk_basic_id_currency_details;
+
+--changeset ravindra.ambati:20240127015 labels:v2024.01.27 context:h2
+SET SCHEMA expenses_tracker;
+ALTER TABLE currency_details ALTER COLUMN IF EXISTS exchangeRate RENAME to exchange_rate;
+ALTER TABLE currency_details ALTER COLUMN IF EXISTS defaultCurrency RENAME TO default_currency;
+-- rollback SET SCHEMA expenses_tracker;
+-- rollback ALTER TABLE currency_details ALTER COLUMN IF EXISTS exchange_rate RENAME TO exchangeRate;
+-- rollback ALTER TABLE currency_details ALTER COLUMN IF EXISTS default_currency RENAME TO defaultCurrency;

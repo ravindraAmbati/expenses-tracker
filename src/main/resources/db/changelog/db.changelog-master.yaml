@@ -9,3 +9,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/create-table-user-details.sql
   - include:
       file: classpath:/db/changelog/changes/create-table-currency-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/create-table-expenses-category-details.sql
