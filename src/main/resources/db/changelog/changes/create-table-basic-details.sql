@@ -24,3 +24,9 @@ SET SCHEMA expenses_tracker;
 ALTER TABLE basic_details ALTER COLUMN IF EXISTS basic_id SET DEFAULT NEXT VALUE FOR gen_id_sequence;
 -- rollback SET SCHEMA expenses_tracker;
 -- rollback ALTER TABLE basic_details ALTER COLUMN IF EXISTS basic_id DROP DEFAULT;
+
+--changeset ravindra.ambati:20240127006 labels:v2024.01.27 context:h2
+SET SCHEMA expenses_tracker;
+ALTER TABLE basic_details ALTER COLUMN IF EXISTS description VARCHAR(1000);
+-- rollback SET SCHEMA expenses_tracker;
+-- rollback ALTER TABLE basic_details ALTER COLUMN IF EXISTS description VARCHAR(100);
