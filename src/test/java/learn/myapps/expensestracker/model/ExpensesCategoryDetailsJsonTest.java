@@ -1,6 +1,7 @@
 package learn.myapps.expensestracker.model;
 
 import learn.myapps.expensestracker.JsonTestUtils;
+import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;

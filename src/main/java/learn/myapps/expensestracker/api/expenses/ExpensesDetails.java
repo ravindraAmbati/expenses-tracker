@@ -1,6 +1,10 @@
-package learn.myapps.expensestracker.model;
+package learn.myapps.expensestracker.api.expenses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import learn.myapps.expensestracker.api.basic.BasicDetails;
+import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
+import learn.myapps.expensestracker.api.currency.CurrencyDetails;
+import learn.myapps.expensestracker.api.payment.PaymentModeDetails;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

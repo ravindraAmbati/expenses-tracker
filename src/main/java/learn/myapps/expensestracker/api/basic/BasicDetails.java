@@ -1,4 +1,4 @@
-package learn.myapps.expensestracker.model;
+package learn.myapps.expensestracker.api.basic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

@@ -1,6 +1,7 @@
 package learn.myapps.expensestracker.model;
 
 import learn.myapps.expensestracker.JsonTestUtils;
+import learn.myapps.expensestracker.api.currency.CurrencyDetails;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

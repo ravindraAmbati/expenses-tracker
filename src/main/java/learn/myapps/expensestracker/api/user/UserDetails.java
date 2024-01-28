@@ -1,6 +1,7 @@
-package learn.myapps.expensestracker.model;
+package learn.myapps.expensestracker.api.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import learn.myapps.expensestracker.api.basic.BasicDetails;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
