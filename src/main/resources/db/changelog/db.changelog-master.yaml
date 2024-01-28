@@ -11,3 +11,7 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/create-table-currency-details.sql
   - include:
       file: classpath:/db/changelog/changes/create-table-expenses-category-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/create-table-payment-mode-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/create-table-expenses-details.sql

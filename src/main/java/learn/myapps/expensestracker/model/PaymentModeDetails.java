@@ -18,10 +18,10 @@ public class PaymentModeDetails extends BasicDetails {
     private String paymentMode;
     @JsonProperty("cardDetails")
     private String cardDetails;
-    @JsonProperty("isDebitCard")
-    private boolean isDebitCard;
-    @JsonProperty("isCreditCard")
-    private boolean isCreditCard;
+    @JsonProperty("cardType")
+    private String cardType;
+    @JsonProperty("upiDetails")
+    private String upiDetails;
     @JsonProperty("accountDetails")
     private String accountDetails;
 }
