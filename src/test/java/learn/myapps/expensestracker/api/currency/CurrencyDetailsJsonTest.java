@@ -1,4 +1,4 @@
-package learn.myapps.expensestracker.model;
+package learn.myapps.expensestracker.api.currency;
 
 import learn.myapps.expensestracker.JsonTestUtils;
 import learn.myapps.expensestracker.api.currency.CurrencyDetails;

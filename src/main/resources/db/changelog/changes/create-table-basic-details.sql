@@ -6,7 +6,7 @@ SET SCHEMA expenses_tracker;
 CREATE TABLE IF NOT EXISTS basic_details(
     basic_id INT NOT NULL PRIMARY KEY,
     description VARCHAR(100),
-    is_delete BOOLEAN,
+    is_deleted BOOLEAN,
     last_updated_by INT DEFAULT 99999,
     last_updated_date_and_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

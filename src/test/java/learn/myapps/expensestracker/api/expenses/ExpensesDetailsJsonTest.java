@@ -1,4 +1,4 @@
-package learn.myapps.expensestracker.model;
+package learn.myapps.expensestracker.api.expenses;
 
 import learn.myapps.expensestracker.JsonTestUtils;
 import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;

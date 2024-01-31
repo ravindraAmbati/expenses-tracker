@@ -1,6 +1,7 @@
 package learn.myapps.expensestracker.api.expenses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import learn.myapps.expensestracker.api.currency.CurrencyDetails;
@@ -17,9 +18,14 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 @SuperBuilder(toBuilder = true)
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "expenses_details", schema = "expenses_tracker")
 public class ExpensesDetails extends BasicDetails {
 
     @JsonProperty("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_id_sequence")
     private long id;
     @JsonProperty("amount")
     private BigDecimal amount;
