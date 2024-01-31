@@ -14,12 +14,11 @@ import java.time.LocalDateTime;
 @ToString
 @SuperBuilder(toBuilder = true)
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "basic_details", schema = "expenses_tracker")
 public class BasicDetails {
 
     @JsonProperty("basicId")
-    @Column(name = "id")
+    @Column(name = "basic_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_id_sequence")
     @Id
     private Long basicId;
