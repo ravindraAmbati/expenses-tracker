@@ -1,7 +1,7 @@
 package learn.myapps.expensestracker.api.category;
 
 import learn.myapps.expensestracker.JsonTestUtils;
-import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
+import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -25,30 +25,34 @@ class ExpensesCategoryDetailsJsonTest {
     @Test
     void expensesCategoryDetailsJsonTest() throws IOException {
         //initialization
+        BasicDetails basicDetails = BasicDetails.builder()
+                .basicId(12345L)
+                .description("test")
+                .isDeleted(false)
+                .lastUpdatedBy("Ravindra")
+                .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                .build();
         ExpensesCategoryDetails expensesCategoryDetails =
                 ExpensesCategoryDetails
                         .builder()
-                        .basicId(12345L)
                         .id(12345L)
                         .expensesCategory("EDUCATION")
                         .alias(List.of("school fee", "tuition fee", "online courses", "udemy", "certification"))
-                        .description("test")
-                        .isDeleted(false)
-                        .lastUpdatedBy("Ravindra")
-                        .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                        .basicDetails(basicDetails)
                         .build();
         //Serialization test
         JsonContent<ExpensesCategoryDetails> actual = expensesCategoryDetailsJacksonTester.write(expensesCategoryDetails);
         assertThat(actual)
                 .isEqualToJson("expensesCategoryDetails.json")
-                .hasJsonPathNumberValue("@.basicId")
                 .hasJsonPathNumberValue("@.id")
                 .hasJsonPathStringValue("@.expensesCategory")
                 .hasJsonPathArrayValue("@.alias")
-                .hasJsonPathStringValue("@.description")
-                .hasJsonPathBooleanValue("@.isDeleted")
-                .hasJsonPathStringValue("@.lastUpdatedBy")
-                .hasJsonPathStringValue("@.lastUpdatedDateAndTime");
+                .hasJsonPathValue("@.basicDetails")
+                .hasJsonPathNumberValue("@.basicDetails.basicId")
+                .hasJsonPathStringValue("@.basicDetails.description")
+                .hasJsonPathBooleanValue("@.basicDetails.isDeleted")
+                .hasJsonPathStringValue("@.basicDetails.lastUpdatedBy")
+                .hasJsonPathStringValue("@.basicDetails.lastUpdatedDateAndTime");
         //Deserialization test
         ObjectContent<ExpensesCategoryDetails> actualObject = expensesCategoryDetailsJacksonTester.parse(jsonTestUtils.getJson("expensesCategoryDetails.json"));
         ExpensesCategoryDetails actualExpensesCategory = actualObject.getObject();

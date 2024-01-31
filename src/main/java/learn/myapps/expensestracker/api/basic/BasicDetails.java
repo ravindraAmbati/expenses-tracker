@@ -19,8 +19,9 @@ public class BasicDetails {
 
     @JsonProperty("basicId")
     @Column(name = "basic_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_id_sequence")
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_generator")
+    @SequenceGenerator(name = "id_sequence_generator", sequenceName = "gen_id_sequence", allocationSize = 1)
     private Long basicId;
     @JsonProperty("description")
     @Column(name = "description")

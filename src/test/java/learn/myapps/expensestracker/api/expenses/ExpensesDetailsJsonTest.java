@@ -1,9 +1,9 @@
 package learn.myapps.expensestracker.api.expenses;
 
 import learn.myapps.expensestracker.JsonTestUtils;
+import learn.myapps.expensestracker.api.basic.BasicDetails;
 import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import learn.myapps.expensestracker.api.currency.CurrencyDetails;
-import learn.myapps.expensestracker.api.expenses.ExpensesDetails;
 import learn.myapps.expensestracker.api.payment.PaymentModeDetails;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,63 +29,54 @@ class ExpensesDetailsJsonTest {
     @Test
     void expensesDetailsJsonSerializeTest() throws IOException {
         //initialization
+        BasicDetails basicDetails = BasicDetails.builder()
+                .basicId(12345L)
+                .description("test")
+                .isDeleted(false)
+                .lastUpdatedBy("Ravindra")
+                .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                .build();
         CurrencyDetails currencyDetails =
                 CurrencyDetails
                         .builder()
-                        .basicId(12345L)
                         .id(12345L)
                         .currency("EUR")
                         .exchangeRate(new BigDecimal("90.854321"))
                         .defaultCurrency("INR")
-                        .description("test")
-                        .isDeleted(false)
-                        .lastUpdatedBy("Ravindra")
-                        .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                        .basicDetails(basicDetails)
                         .build();
         ExpensesCategoryDetails expensesCategoryDetails =
                 ExpensesCategoryDetails
                         .builder()
-                        .basicId(12345L)
                         .id(12345L)
                         .expensesCategory("EDUCATION")
                         .alias(List.of("school fee", "tuition fee", "online courses", "udemy", "certification"))
-                        .description("test")
-                        .isDeleted(false)
-                        .lastUpdatedBy("Ravindra")
-                        .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                        .basicDetails(basicDetails)
                         .build();
         PaymentModeDetails paymentModeDetails =
                 PaymentModeDetails
                         .builder()
-                        .basicId(12345L)
                         .id(12345L)
                         .paymentMode("CARD")
                         .cardDetails("4315***99")
                         .cardType("C")
                         .upiDetails("ravindra.ambati@upi.com")
                         .accountDetails("")
-                        .description("test")
-                        .isDeleted(false)
-                        .lastUpdatedBy("Ravindra")
-                        .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                        .basicDetails(basicDetails)
                         .build();
         //Serialization test
         ExpensesDetails expensesDetails =
                 ExpensesDetails
                         .builder()
-                        .basicId(12345L)
                         .id(1234L)
                         .amount(new BigDecimal("123.45"))
                         .paidBy("Ravindra")
                         .paidTo("Ravindra")
                         .dateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
-                        .description("test")
                         .paymentMode(paymentModeDetails)
                         .currency(currencyDetails)
                         .category(expensesCategoryDetails)
-                        .isDeleted(false)
-                        .lastUpdatedBy("Ravindra")
-                        .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                        .basicDetails(basicDetails)
                         .build();
         JsonContent<ExpensesDetails> actual = expensesDetailsJacksonTester.write(expensesDetails);
         Assertions.assertThat(actual).isEqualToJson("expensesDetails.json");

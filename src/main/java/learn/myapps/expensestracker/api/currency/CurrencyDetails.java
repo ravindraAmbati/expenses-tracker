@@ -15,18 +15,30 @@ import java.math.BigDecimal;
 @ToString
 @SuperBuilder(toBuilder = true)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "currency_details", schema = "expenses_tracker")
-public class CurrencyDetails extends BasicDetails {
+public class CurrencyDetails {
 
     @JsonProperty("id")
+    @Column(name = "id")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_generator")
+    @SequenceGenerator(name = "id_sequence_generator", sequenceName = "gen_id_sequence", allocationSize = 1)
     private Long id;
+
     @JsonProperty("currency")
+    @Column(name = "currency")
     private String currency;
+
     @JsonProperty("exchangeRate")
+    @Column(name = "exchange_rate")
     private BigDecimal exchangeRate;
+
     @JsonProperty("defaultCurrency")
+    @Column(name = "default_currency")
     private String defaultCurrency;
+
+    @JsonProperty("basicDetails")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "basic_id", referencedColumnName = "basic_id")
+    private BasicDetails basicDetails;
 }

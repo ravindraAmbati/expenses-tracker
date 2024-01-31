@@ -19,14 +19,15 @@ import java.time.LocalDateTime;
 @ToString
 @SuperBuilder(toBuilder = true)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "expenses_details", schema = "expenses_tracker")
-public class ExpensesDetails extends BasicDetails {
+public class ExpensesDetails {
 
     @JsonProperty("id")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_generator")
+    @SequenceGenerator(name = "id_sequence_generator", sequenceName = "gen_id_sequence", allocationSize = 1)
     private long id;
+
     @JsonProperty("amount")
     private BigDecimal amount;
     @JsonProperty("paidBy")
@@ -35,10 +36,24 @@ public class ExpensesDetails extends BasicDetails {
     private String paidTo;
     @JsonProperty("dateAndTime")
     private LocalDateTime dateAndTime;
+
     @JsonProperty("paymentMode")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private PaymentModeDetails paymentMode;
+
     @JsonProperty("category")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private ExpensesCategoryDetails category;
+
     @JsonProperty("currency")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private CurrencyDetails currency;
+
+    @JsonProperty("basicDetails")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "basic_id", referencedColumnName = "basic_id")
+    private BasicDetails basicDetails;
 }

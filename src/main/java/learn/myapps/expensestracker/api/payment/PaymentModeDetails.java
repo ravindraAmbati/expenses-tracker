@@ -13,22 +13,38 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder(toBuilder = true)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "payment_mode_details", schema = "expenses_tracker")
-public class PaymentModeDetails extends BasicDetails {
+public class PaymentModeDetails {
 
     @JsonProperty("id")
+    @Column(name = "id")
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_generator")
+    @SequenceGenerator(name = "id_sequence_generator", sequenceName = "gen_id_sequence", allocationSize = 1)
     private Long id;
+
     @JsonProperty("paymentMode")
+    @Column(name = "payment_mode")
     private String paymentMode;
+
     @JsonProperty("cardDetails")
+    @Column(name = "card_details")
     private String cardDetails;
+
     @JsonProperty("cardType")
+    @Column(name = "card_type")
     private String cardType;
+
     @JsonProperty("upiDetails")
+    @Column(name = "upi_details")
     private String upiDetails;
+
     @JsonProperty("accountDetails")
+    @Column(name = "account_details")
     private String accountDetails;
+
+    @JsonProperty("basicDetails")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "basic_id", referencedColumnName = "basic_id")
+    private BasicDetails basicDetails;
 }

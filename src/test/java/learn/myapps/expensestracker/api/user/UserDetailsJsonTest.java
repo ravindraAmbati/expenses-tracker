@@ -1,7 +1,7 @@
 package learn.myapps.expensestracker.api.user;
 
 import learn.myapps.expensestracker.JsonTestUtils;
-import learn.myapps.expensestracker.api.user.UserDetails;
+import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -24,32 +24,39 @@ class UserDetailsJsonTest {
     @Test
     void userDetailsJsonSerializeTest() throws IOException {
         //initialization
+        BasicDetails basicDetails = BasicDetails.builder()
+                .basicId(12345L)
+                .description("test")
+                .isDeleted(false)
+                .lastUpdatedBy("Ravindra")
+                .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
+                .build();
         UserDetails userDetails =
                 UserDetails
                         .builder()
-                        .basicId(12345L)
                         .id(12345L)
                         .firstName("Ravindra")
                         .lastName("Ambati")
                         .emailId("ravindra.reddy.ambati@outlook.in")
                         .mobileNo("+919849547160")
-                        .isDeleted(false)
-                        .lastUpdatedBy("Ravindra")
-                        .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-12T20:00:00"))
+                        .basicDetails(basicDetails)
                         .build();
         //Serialization test
         JsonContent<UserDetails> actual = userDetailsJacksonTester.write(userDetails);
         assertThat(actual)
                 .isEqualToJson("userDetails.json")
-                .hasJsonPathNumberValue("@.basicId")
                 .hasJsonPathNumberValue("@.id")
                 .hasJsonPathStringValue("@.firstName")
                 .hasJsonPathStringValue("@.lastName")
                 .hasJsonPathStringValue("@.emailId")
                 .hasJsonPathStringValue("@.mobileNo")
-                .hasJsonPathBooleanValue("@.isDeleted")
-                .hasJsonPathStringValue("@.lastUpdatedBy")
-                .hasJsonPathStringValue("@.lastUpdatedDateAndTime");
+                .hasJsonPathValue("@.basicDetails")
+                .hasJsonPathNumberValue("@.basicDetails.basicId")
+                .hasJsonPathStringValue("@.basicDetails.description")
+                .hasJsonPathBooleanValue("@.basicDetails.isDeleted")
+                .hasJsonPathStringValue("@.basicDetails.lastUpdatedBy")
+                .hasJsonPathStringValue("@.basicDetails.lastUpdatedDateAndTime");
+
         //Deserialization test
         ObjectContent<UserDetails> actualObject = userDetailsJacksonTester.parse(jsonTestUtils.getJson("userDetails.json"));
         UserDetails actualUserDetails = actualObject.getObject();
