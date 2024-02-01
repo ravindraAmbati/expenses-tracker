@@ -6,6 +6,7 @@ import learn.myapps.expensestracker.api.basic.BasicDetails;
 import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import learn.myapps.expensestracker.api.currency.CurrencyDetails;
 import learn.myapps.expensestracker.api.payment.PaymentModeDetails;
+import learn.myapps.expensestracker.api.user.UserDetails;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -30,10 +31,15 @@ public class ExpensesDetails {
 
     @JsonProperty("amount")
     private BigDecimal amount;
+
     @JsonProperty("paidBy")
-    private String paidBy;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private UserDetails paidBy;
+
     @JsonProperty("paidTo")
     private String paidTo;
+
     @JsonProperty("dateAndTime")
     private LocalDateTime dateAndTime;
 

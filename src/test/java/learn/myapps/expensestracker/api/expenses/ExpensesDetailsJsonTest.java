@@ -5,6 +5,7 @@ import learn.myapps.expensestracker.api.basic.BasicDetails;
 import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import learn.myapps.expensestracker.api.currency.CurrencyDetails;
 import learn.myapps.expensestracker.api.payment.PaymentModeDetails;
+import learn.myapps.expensestracker.api.user.UserDetails;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +65,23 @@ class ExpensesDetailsJsonTest {
                         .accountDetails("")
                         .basicDetails(basicDetails)
                         .build();
+        UserDetails userDetails =
+                UserDetails
+                        .builder()
+                        .id(12345L)
+                        .firstName("Ravindra")
+                        .lastName("Ambati")
+                        .emailId("ravindra.reddy.ambati@outlook.in")
+                        .mobileNo("+919849547160")
+                        .basicDetails(basicDetails)
+                        .build();
         //Serialization test
         ExpensesDetails expensesDetails =
                 ExpensesDetails
                         .builder()
                         .id(1234L)
                         .amount(new BigDecimal("123.45"))
-                        .paidBy("Ravindra")
+                        .paidBy(userDetails)
                         .paidTo("Ravindra")
                         .dateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
                         .paymentMode(paymentModeDetails)
