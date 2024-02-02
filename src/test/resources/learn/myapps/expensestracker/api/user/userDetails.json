@@ -1,0 +1,14 @@
+{
+  "id": 12345,
+  "firstName": "Ravindra",
+  "lastName": "Ambati",
+  "emailId": "ravindra.reddy.ambati@outlook.in",
+  "mobileNo": "+919849547160",
+  "basicDetails": {
+    "basicId": 12345,
+    "description": "test",
+    "isDeleted": false,
+    "lastUpdatedBy": "Ravindra",
+    "lastUpdatedDateAndTime": "2024-01-13T20:00:00"
+  }
+}

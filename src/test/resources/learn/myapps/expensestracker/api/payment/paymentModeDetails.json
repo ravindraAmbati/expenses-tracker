@@ -1,0 +1,15 @@
+{
+  "id": 12345,
+  "paymentMode": "CARD",
+  "cardDetails": "4315***99",
+  "cardType": "C",
+  "upiDetails": "ravindra.ambati@upi.com",
+  "accountDetails": "",
+  "basicDetails": {
+    "basicId": 12345,
+    "description": "test",
+    "isDeleted": false,
+    "lastUpdatedBy": "Ravindra",
+    "lastUpdatedDateAndTime": "2024-01-13T20:00:00"
+  }
+}

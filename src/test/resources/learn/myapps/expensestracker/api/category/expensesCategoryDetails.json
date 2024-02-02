@@ -1,0 +1,18 @@
+{
+  "id": 12345,
+  "expensesCategory": "EDUCATION",
+  "alias": [
+    "school fee",
+    "tuition fee",
+    "online courses",
+    "udemy",
+    "certification"
+  ],
+  "basicDetails": {
+    "basicId": 12345,
+    "description": "test",
+    "isDeleted": false,
+    "lastUpdatedBy": "Ravindra",
+    "lastUpdatedDateAndTime": "2024-01-13T20:00:00"
+  }
+}
