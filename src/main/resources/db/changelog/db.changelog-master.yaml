@@ -15,3 +15,15 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/create-table-payment-mode-details.sql
   - include:
       file: classpath:/db/changelog/changes/create-table-expenses-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/history/tables/create-table-basic-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/history/tables/create-table-currency-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/history/tables/create-table-expenses-category-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/history/tables/create-table-expenses-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/history/tables/create-table-payment-mode-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/history/tables/create-table-user-details.sql

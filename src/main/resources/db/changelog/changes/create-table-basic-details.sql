@@ -4,10 +4,10 @@
 -- preconditions onFail:HALT onError:HALT
 SET SCHEMA expenses_tracker;
 CREATE TABLE IF NOT EXISTS basic_details(
-    basic_id INT NOT NULL PRIMARY KEY,
+    basic_id BIGINT NOT NULL PRIMARY KEY,
     description VARCHAR(100),
     is_deleted BOOLEAN,
-    last_updated_by INT DEFAULT 99999,
+    last_updated_by BIGINT DEFAULT 99999,
     last_updated_date_and_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- rollback SET SCHEMA expenses_tracker;
