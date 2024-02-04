@@ -1,6 +1,7 @@
 package learn.myapps.expensestracker.api.basic;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +19,8 @@ public class BasicDetailsController {
 
     @GetMapping("/all")
     public Page<BasicDetails> findAll(@RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
-                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
-        return basicDetailsService.findAll(pageNumber, pageSize);
+                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                      @RequestParam(name = "sort", defaultValue = "basicId") String basicId) {
+        return basicDetailsService.findAll(pageNumber, pageSize, Sort.by(basicId));
     }
 }
