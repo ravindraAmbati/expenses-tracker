@@ -33,8 +33,7 @@ class PaymentModeDetailsJsonTest {
                 .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
                 .build();
         PaymentModeDetails paymentModeDetails =
-                PaymentModeDetails
-                        .builder()
+                PaymentModeDetails.builder()
                         .id(12345L)
                         .paymentMode("CARD")
                         .cardDetails("4315***99")

@@ -33,8 +33,7 @@ class ExpensesCategoryDetailsJsonTest {
                 .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
                 .build();
         ExpensesCategoryDetails expensesCategoryDetails =
-                ExpensesCategoryDetails
-                        .builder()
+                ExpensesCategoryDetails.builder()
                         .id(12345L)
                         .expensesCategory("EDUCATION")
                         .alias(List.of("school fee", "tuition fee", "online courses", "udemy", "certification"))

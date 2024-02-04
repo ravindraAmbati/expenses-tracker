@@ -34,8 +34,7 @@ class CurrencyDetailsJsonTest {
                 .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
                 .build();
         CurrencyDetails currencyDetails =
-                CurrencyDetails
-                        .builder()
+                CurrencyDetails.builder()
                         .id(12345L)
                         .currency("EUR")
                         .exchangeRate(new BigDecimal("90.854321"))

@@ -37,26 +37,20 @@ class ExpensesDetailsJsonTest {
                 .lastUpdatedBy("Ravindra")
                 .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
                 .build();
-        CurrencyDetails currencyDetails =
-                CurrencyDetails
-                        .builder()
+        CurrencyDetails currencyDetails = CurrencyDetails.builder()
                         .id(12345L)
                         .currency("EUR")
                         .exchangeRate(new BigDecimal("90.854321"))
                         .defaultCurrency("INR")
                         .basicDetails(basicDetails)
                         .build();
-        ExpensesCategoryDetails expensesCategoryDetails =
-                ExpensesCategoryDetails
-                        .builder()
-                        .id(12345L)
+        ExpensesCategoryDetails expensesCategoryDetails = ExpensesCategoryDetails
+                        .builder().id(12345L)
                         .expensesCategory("EDUCATION")
                         .alias(List.of("school fee", "tuition fee", "online courses", "udemy", "certification"))
                         .basicDetails(basicDetails)
                         .build();
-        PaymentModeDetails paymentModeDetails =
-                PaymentModeDetails
-                        .builder()
+        PaymentModeDetails paymentModeDetails = PaymentModeDetails.builder()
                         .id(12345L)
                         .paymentMode("CARD")
                         .cardDetails("4315***99")
@@ -65,9 +59,7 @@ class ExpensesDetailsJsonTest {
                         .accountDetails("")
                         .basicDetails(basicDetails)
                         .build();
-        UserDetails userDetails =
-                UserDetails
-                        .builder()
+        UserDetails userDetails = UserDetails.builder()
                         .id(12345L)
                         .firstName("Ravindra")
                         .lastName("Ambati")
@@ -76,9 +68,7 @@ class ExpensesDetailsJsonTest {
                         .basicDetails(basicDetails)
                         .build();
         //Serialization test
-        ExpensesDetails expensesDetails =
-                ExpensesDetails
-                        .builder()
+        ExpensesDetails expensesDetails = ExpensesDetails.builder()
                         .id(1234L)
                         .amount(new BigDecimal("123.45"))
                         .paidBy(userDetails)
