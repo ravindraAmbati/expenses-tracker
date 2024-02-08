@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,20 +39,39 @@ class BasicDetailsServiceTest {
 
     @Test
     void create() {
-        Mockito.when(basicDetailsRepo.save(basicDetails)).thenReturn(basicDetails);
+        basicDetails.setBasicId(null);
+        BasicDetails createdBasicDetails = new BasicDetails();
+        BeanUtils.copyProperties(basicDetails, createdBasicDetails);
+        createdBasicDetails.setBasicId(1L);
+        Mockito.when(basicDetailsRepo.save(basicDetails)).thenReturn(createdBasicDetails);
         Long id = basicDetailsService.create(basicDetails);
         Assertions.assertEquals(1L, id);
     }
 
     @Test
     void createFail() {
+        basicDetails.setBasicId(null);
         Mockito.when(basicDetailsRepo.save(basicDetails)).thenReturn(null);
         IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.create(basicDetails), "");
         Assertions.assertEquals("Failed to create the basic details entity", illegalArgumentException.getMessage());
     }
 
     @Test
+    void createEmptyFail() {
+        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.create(null), "");
+        Assertions.assertEquals("Requested Basic Details should not be empty", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void createIdNotEmptyFail() {
+        basicDetails.setBasicId(1L);
+        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.create(basicDetails), "");
+        Assertions.assertEquals("Requested Basic Details BasicId should be empty", illegalArgumentException.getMessage());
+    }
+
+    @Test
     void update() {
+        Mockito.when(basicDetailsRepo.findById(1L)).thenReturn(Optional.of(basicDetails));
         Mockito.when(basicDetailsRepo.save(basicDetails)).thenReturn(basicDetails);
         BasicDetails createdBasicDetails = basicDetailsService.update(basicDetails);
         Assertions.assertEquals(createdBasicDetails, basicDetails);
@@ -59,9 +79,23 @@ class BasicDetailsServiceTest {
 
     @Test
     void updateFail() {
+        Mockito.when(basicDetailsRepo.findById(1L)).thenReturn(Optional.of(basicDetails));
         Mockito.when(basicDetailsRepo.save(basicDetails)).thenReturn(null);
         IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.update(basicDetails), "");
         Assertions.assertEquals("Failed to update the basic details entity", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void updateEmptyFail() {
+        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.update(null), "");
+        Assertions.assertEquals("Requested Basic Details should not be empty", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void updateIdNotEmptyFail() {
+        basicDetails.setBasicId(null);
+        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.update(basicDetails), "");
+        Assertions.assertEquals("Requested Basic Details BasicId should NOT be empty", illegalArgumentException.getMessage());
     }
 
     @Test

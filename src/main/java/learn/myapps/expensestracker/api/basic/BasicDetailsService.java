@@ -13,6 +13,8 @@ import java.util.Optional;
 @Service
 public class BasicDetailsService implements ApiService<BasicDetails> {
 
+    public static final String ID_NULL_CHECK_ERROR_MESSAGE = "Requested Basic Details BasicId should NOT be empty";
+    public static final String ENTITY_NULL_CHECK_ERROR_MESSAGE = "Requested Basic Details should not be empty";
     private final BasicDetailsRepo basicDetailsRepo;
 
     public BasicDetailsService(BasicDetailsRepo basicDetailsRepo) {
@@ -21,6 +23,8 @@ public class BasicDetailsService implements ApiService<BasicDetails> {
 
     @Override
     public Long create(BasicDetails basicDetails) {
+        Assert.notNull(basicDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
+        Assert.isNull(basicDetails.getBasicId(), "Requested Basic Details BasicId should be empty");
         BasicDetails createdBasicDetails = basicDetailsRepo.save(basicDetails);
         Assert.notNull(createdBasicDetails, "Failed to create the basic details entity");
         return createdBasicDetails.getBasicId();
@@ -28,6 +32,9 @@ public class BasicDetailsService implements ApiService<BasicDetails> {
 
     @Override
     public BasicDetails update(BasicDetails basicDetails) {
+        Assert.notNull(basicDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
+        Assert.notNull(basicDetails.getBasicId(), ID_NULL_CHECK_ERROR_MESSAGE);
+        findById(basicDetails.getBasicId());
         BasicDetails createdBasicDetails = basicDetailsRepo.save(basicDetails);
         Assert.notNull(createdBasicDetails, "Failed to update the basic details entity");
         return createdBasicDetails;
@@ -35,6 +42,7 @@ public class BasicDetailsService implements ApiService<BasicDetails> {
 
     @Override
     public boolean isDeleted(Long id) {
+        Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         basicDetailsRepo.deleteById(id);
         Assert.isTrue(basicDetailsRepo.findById(id).isEmpty(), MessageFormat.format("Failed to delete the basic details entity of id: {0}", id));
         return basicDetailsRepo.findById(id).isEmpty();
@@ -42,6 +50,7 @@ public class BasicDetailsService implements ApiService<BasicDetails> {
 
     @Override
     public BasicDetails findById(Long id) {
+        Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         Optional<BasicDetails> retrievedBasicDetails = basicDetailsRepo.findById(id);
         Assert.isTrue(retrievedBasicDetails.isPresent(), MessageFormat.format("Searched basic details entity is not found of the id: {0}", id));
         return retrievedBasicDetails.get();
