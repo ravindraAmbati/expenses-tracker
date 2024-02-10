@@ -116,8 +116,8 @@ class BasicDetailsServiceTest {
     @Test
     void findById() {
         Mockito.when(basicDetailsRepo.findById(1L)).thenReturn(Optional.of(basicDetails));
-        BasicDetails retrivedBasicDetails = basicDetailsService.findById(1L);
-        Assertions.assertEquals(basicDetails, retrivedBasicDetails);
+        BasicDetails retrievedBasicDetails = basicDetailsService.findById(1L);
+        Assertions.assertEquals(basicDetails, retrievedBasicDetails);
     }
 
     @Test

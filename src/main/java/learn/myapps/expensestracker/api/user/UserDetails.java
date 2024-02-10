@@ -21,7 +21,7 @@ public class UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_sequence_generator")
     @SequenceGenerator(name = "id_sequence_generator", sequenceName = "gen_id_sequence", allocationSize = 1)
-    private long id;
+    private Long id;
 
     @JsonProperty("firstName")
     @Column(name = "first_name")

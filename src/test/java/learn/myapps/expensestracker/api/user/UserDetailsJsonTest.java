@@ -31,9 +31,7 @@ class UserDetailsJsonTest {
                 .lastUpdatedBy("Ravindra")
                 .lastUpdatedDateAndTime(LocalDateTime.parse("2024-01-13T20:00:00"))
                 .build();
-        UserDetails userDetails =
-                UserDetails
-                        .builder()
+        UserDetails userDetails = UserDetails.builder()
                         .id(12345L)
                         .firstName("Ravindra")
                         .lastName("Ambati")
