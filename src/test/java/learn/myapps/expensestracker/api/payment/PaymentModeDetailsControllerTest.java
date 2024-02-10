@@ -61,7 +61,7 @@ class PaymentModeDetailsControllerTest {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, paymentModeDetails, String.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals("8", responseEntity.getBody());
+        Assertions.assertEquals("27", responseEntity.getBody());
     }
 
     @Order(2)
@@ -69,7 +69,7 @@ class PaymentModeDetailsControllerTest {
     void update() {
         PaymentModeDetails updatePaymentModeDetails = new PaymentModeDetails();
         BeanUtils.copyProperties(paymentModeDetails, updatePaymentModeDetails);
-        updatePaymentModeDetails.setId(8L);
+        updatePaymentModeDetails.setId(27L);
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<PaymentModeDetails> requestBody = new HttpEntity<>(updatePaymentModeDetails, httpHeaders);
         ResponseEntity<PaymentModeDetails> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestBody, PaymentModeDetails.class);
@@ -77,7 +77,7 @@ class PaymentModeDetailsControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         BasicDetails updatedBasicDetails = new BasicDetails();
         BeanUtils.copyProperties(updatePaymentModeDetails.getBasicDetails(), updatedBasicDetails);
-        updatedBasicDetails.setBasicId(10L);
+        updatedBasicDetails.setBasicId(29L);
         updatePaymentModeDetails.setBasicDetails(updatedBasicDetails);
         Assertions.assertEquals(updatePaymentModeDetails, responseEntity.getBody());
     }
@@ -86,7 +86,7 @@ class PaymentModeDetailsControllerTest {
     @Test
     void findById() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", "8");
+        params.put("id", "27");
         ResponseEntity<PaymentModeDetails> responseEntity = restTemplate.getForEntity(getApi, PaymentModeDetails.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -99,7 +99,7 @@ class PaymentModeDetailsControllerTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> requestBody = new HttpEntity<>("", httpHeaders);
         Map<String, String> params = new HashMap<>();
-        params.put("id", "8");
+        params.put("id", "27");
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(deleteApi, HttpMethod.DELETE, requestBody, Boolean.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

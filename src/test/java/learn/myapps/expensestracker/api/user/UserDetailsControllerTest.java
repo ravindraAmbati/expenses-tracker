@@ -60,7 +60,7 @@ class UserDetailsControllerTest {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, userDetails, String.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals("11", responseEntity.getBody());
+        Assertions.assertEquals("30", responseEntity.getBody());
     }
 
     @Order(2)
@@ -68,7 +68,7 @@ class UserDetailsControllerTest {
     void update() {
         UserDetails updateUserDetails = new UserDetails();
         BeanUtils.copyProperties(userDetails, updateUserDetails);
-        updateUserDetails.setId(11L);
+        updateUserDetails.setId(30L);
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<UserDetails> requestBody = new HttpEntity<>(updateUserDetails, httpHeaders);
         ResponseEntity<UserDetails> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestBody, UserDetails.class);
@@ -76,7 +76,7 @@ class UserDetailsControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         BasicDetails updatedBasicDetails = new BasicDetails();
         BeanUtils.copyProperties(updateUserDetails.getBasicDetails(), updatedBasicDetails);
-        updatedBasicDetails.setBasicId(13L);
+        updatedBasicDetails.setBasicId(32L);
         updateUserDetails.setBasicDetails(updatedBasicDetails);
         Assertions.assertEquals(updateUserDetails, responseEntity.getBody());
     }
@@ -85,7 +85,7 @@ class UserDetailsControllerTest {
     @Test
     void findById() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", "11");
+        params.put("id", "30");
         ResponseEntity<UserDetails> responseEntity = restTemplate.getForEntity(getApi, UserDetails.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -98,7 +98,7 @@ class UserDetailsControllerTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> requestBody = new HttpEntity<>("", httpHeaders);
         Map<String, String> params = new HashMap<>();
-        params.put("id", "11");
+        params.put("id", "30");
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(deleteApi, HttpMethod.DELETE, requestBody, Boolean.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
