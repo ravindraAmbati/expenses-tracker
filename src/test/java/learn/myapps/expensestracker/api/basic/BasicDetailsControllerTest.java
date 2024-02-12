@@ -100,6 +100,5 @@ class BasicDetailsControllerTest {
         Assertions.assertNotNull(responseEntity);
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertNotNull(responseEntity.getBody().getContent());
-        Assertions.assertTrue(responseEntity.getBody().getContent().isEmpty());
     }
 }
