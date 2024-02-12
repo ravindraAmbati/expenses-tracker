@@ -15,9 +15,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "expenses_details", schema = "expenses_tracker")

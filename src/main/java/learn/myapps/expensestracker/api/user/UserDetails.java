@@ -3,14 +3,14 @@ package learn.myapps.expensestracker.api.user;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "user_details", schema = "expenses_tracker")

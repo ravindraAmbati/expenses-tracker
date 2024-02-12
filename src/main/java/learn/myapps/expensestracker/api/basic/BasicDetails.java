@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "basic_details", schema = "expenses_tracker")

@@ -10,9 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "currency_details", schema = "expenses_tracker")

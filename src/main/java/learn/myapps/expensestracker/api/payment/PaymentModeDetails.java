@@ -8,9 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "payment_mode_details", schema = "expenses_tracker")

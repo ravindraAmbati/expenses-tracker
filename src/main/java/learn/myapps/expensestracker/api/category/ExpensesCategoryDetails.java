@@ -10,9 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString
 @SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "expenses_category_details", schema = "expenses_tracker")
