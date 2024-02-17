@@ -7,15 +7,18 @@ import learn.myapps.expensestracker.api.payment.PaymentModeDetails;
 import learn.myapps.expensestracker.api.user.UserDetails;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ExpensesDetailsRepoTest {
 
     @Autowired
@@ -72,17 +75,24 @@ class ExpensesDetailsRepoTest {
         expensesDetailsRepo.deleteAll();
     }
 
-    @Order(1)
+    @Order(91)
     @Test
     void findById() {
         //when
         expensesDetailsRepo.save(expensesDetails);
-        Optional<ExpensesDetails> actual = expensesDetailsRepo.findById(21L);
+        Iterable<ExpensesDetails> all = expensesDetailsRepo.findAll();
+        Optional<ExpensesDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long searchId = first.get().getId();
+        Optional<ExpensesDetails> actual = expensesDetailsRepo.findById(searchId);
         //then
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(expensesDetails, actual.get());
     }
 
+    @Order(92)
     @Test
     void create() {
         //when
@@ -92,6 +102,7 @@ class ExpensesDetailsRepoTest {
         Assertions.assertEquals(expensesDetails, actual);
     }
 
+    @Order(93)
     @Test
     void update() {
         //when
@@ -104,14 +115,22 @@ class ExpensesDetailsRepoTest {
         Assertions.assertEquals(updatedAmount, actual.getAmount());
     }
 
-    @Order(2)
+    @Order(94)
     @Test
     void deleteById() {
         //when
         expensesDetailsRepo.save(expensesDetails);
-        Optional<ExpensesDetails> actual = expensesDetailsRepo.findById(27L);
+        Iterable<ExpensesDetails> all = expensesDetailsRepo.findAll();
+        Optional<ExpensesDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long deleteId = first.get().getId();
+        Optional<ExpensesDetails> actual = expensesDetailsRepo.findById(deleteId);
         //then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(expensesDetails, actual.get());
+        expensesDetailsRepo.deleteById(53L);
+        actual = expensesDetailsRepo.findById(53L);
+        Assertions.assertFalse(actual.isPresent());
     }
 }

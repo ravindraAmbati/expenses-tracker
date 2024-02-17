@@ -2,13 +2,16 @@ package learn.myapps.expensestracker.api.basic;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BasicDetailsRepoTest {
 
 
@@ -28,17 +31,24 @@ class BasicDetailsRepoTest {
         basicDetailsRepo.deleteAll();
     }
 
-    @Order(1)
+    @Order(61)
     @Test
     void findById() {
         //when
         basicDetailsRepo.save(basicDetails);
-        Optional<BasicDetails> actual = basicDetailsRepo.findById(1L);
+        Iterable<BasicDetails> all = basicDetailsRepo.findAll();
+        Optional<BasicDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long searchId = first.get().getBasicId();
+        Optional<BasicDetails> actual = basicDetailsRepo.findById(searchId);
         //then
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(basicDetails, actual.get());
     }
 
+    @Order(62)
     @Test
     void create() {
         //when
@@ -48,6 +58,7 @@ class BasicDetailsRepoTest {
         Assertions.assertEquals(basicDetails, actual);
     }
 
+    @Order(63)
     @Test
     void update() {
         //when
@@ -59,14 +70,22 @@ class BasicDetailsRepoTest {
         Assertions.assertEquals("updated", actual.getDescription());
     }
 
-    @Order(2)
+    @Order(64)
     @Test
     void deleteById() {
         //when
         basicDetailsRepo.save(basicDetails);
-        Optional<BasicDetails> actual = basicDetailsRepo.findById(2L);
+        Iterable<BasicDetails> all = basicDetailsRepo.findAll();
+        Optional<BasicDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long deleteId = first.get().getBasicId();
+        Optional<BasicDetails> actual = basicDetailsRepo.findById(deleteId);
         //then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(basicDetails, actual.get());
+        basicDetailsRepo.deleteById(deleteId);
+        actual = basicDetailsRepo.findById(deleteId);
+        Assertions.assertFalse(actual.isPresent());
     }
 }

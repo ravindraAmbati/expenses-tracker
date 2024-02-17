@@ -1,15 +1,19 @@
 package learn.myapps.expensestracker.api.user;
 
 import learn.myapps.expensestracker.api.basic.BasicDetails;
+import learn.myapps.expensestracker.api.payment.PaymentModeDetails;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserDetailsRepoTest {
 
     @Autowired
@@ -36,17 +40,24 @@ class UserDetailsRepoTest {
         userDetailsRepo.deleteAll();
     }
 
-    @Order(1)
+    @Order(111)
     @Test
     void findById() {
         //when
         userDetailsRepo.save(userDetails);
-        Optional<UserDetails> actual = userDetailsRepo.findById(53L);
+        Iterable<UserDetails> all = userDetailsRepo.findAll();
+        Optional<UserDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long searchId = first.get().getId();
+        Optional<UserDetails> actual = userDetailsRepo.findById(searchId);
         //then
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(userDetails, actual.get());
     }
 
+    @Order(112)
     @Test
     void create() {
         //when
@@ -56,6 +67,7 @@ class UserDetailsRepoTest {
         Assertions.assertEquals(userDetails, actual);
     }
 
+    @Order(113)
     @Test
     void update() {
         //when
@@ -68,14 +80,22 @@ class UserDetailsRepoTest {
         Assertions.assertEquals(updatedEmail, actual.getEmailId());
     }
 
-    @Order(2)
+    @Order(114)
     @Test
     void deleteById() {
         //when
         userDetailsRepo.save(userDetails);
-        Optional<UserDetails> actual = userDetailsRepo.findById(55L);
+        Iterable<UserDetails> all = userDetailsRepo.findAll();
+        Optional<UserDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long deleteId = first.get().getId();
+        Optional<UserDetails> actual = userDetailsRepo.findById(deleteId);
         //then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(userDetails, actual.get());
+        userDetailsRepo.deleteById(deleteId);
+        actual = userDetailsRepo.findById(deleteId);
+        Assertions.assertFalse(actual.isPresent());
     }
 }

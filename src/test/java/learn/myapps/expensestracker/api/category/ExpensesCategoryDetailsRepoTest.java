@@ -3,14 +3,17 @@ package learn.myapps.expensestracker.api.category;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ExpensesCategoryDetailsRepoTest {
 
     @Autowired
@@ -35,17 +38,24 @@ class ExpensesCategoryDetailsRepoTest {
         expensesCategoryDetailsRepo.deleteAll();
     }
 
-    @Order(1)
+    @Order(71)
     @Test
     void findById() {
         //when
         expensesCategoryDetailsRepo.save(expensesCategoryDetails);
-        Optional<ExpensesCategoryDetails> actual = expensesCategoryDetailsRepo.findById(5L);
+        Iterable<ExpensesCategoryDetails> all = expensesCategoryDetailsRepo.findAll();
+        Optional<ExpensesCategoryDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long searchId = first.get().getId();
+        Optional<ExpensesCategoryDetails> actual = expensesCategoryDetailsRepo.findById(searchId);
         //then
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(expensesCategoryDetails, actual.get());
     }
 
+    @Order(72)
     @Test
     void create() {
         //when
@@ -55,6 +65,7 @@ class ExpensesCategoryDetailsRepoTest {
         Assertions.assertEquals(expensesCategoryDetails, actual);
     }
 
+    @Order(73)
     @Test
     void update() {
         //when
@@ -67,14 +78,22 @@ class ExpensesCategoryDetailsRepoTest {
         Assertions.assertEquals(expectedAlias, actual.getAlias());
     }
 
-    @Order(2)
+    @Order(74)
     @Test
     void deleteById() {
         //when
         expensesCategoryDetailsRepo.save(expensesCategoryDetails);
-        Optional<ExpensesCategoryDetails> actual = expensesCategoryDetailsRepo.findById(7L);
+        Iterable<ExpensesCategoryDetails> all = expensesCategoryDetailsRepo.findAll();
+        Optional<ExpensesCategoryDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long deleteId = first.get().getId();
+        Optional<ExpensesCategoryDetails> actual = expensesCategoryDetailsRepo.findById(deleteId);
         //then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(expensesCategoryDetails, actual.get());
+        expensesCategoryDetailsRepo.deleteById(deleteId);
+        actual = expensesCategoryDetailsRepo.findById(deleteId);
+        Assertions.assertFalse(actual.isPresent());
     }
 }

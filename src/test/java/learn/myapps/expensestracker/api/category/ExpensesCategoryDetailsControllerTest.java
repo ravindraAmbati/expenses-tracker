@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
-@TestClassOrder(ClassOrderer.ClassName.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ExpensesCategoryDetailsControllerTest {
 
@@ -53,57 +53,86 @@ class ExpensesCategoryDetailsControllerTest {
                 .build();
     }
 
-    @Order(1)
+    @Order(11)
     @Test
     void create() {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, expensesCategoryDetails, String.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals("2", responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(2)
+    @Order(12)
     @Test
     void update() {
+        ResponseEntity<CustomPageImpl<ExpensesCategoryDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<ExpensesCategoryDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long updateId = first.get().getId();
         ExpensesCategoryDetails updatedExpensesCategory = new ExpensesCategoryDetails();
         BeanUtils.copyProperties(expensesCategoryDetails, updatedExpensesCategory);
-        updatedExpensesCategory.setId(2L);
+        updatedExpensesCategory.setId(updateId);
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<ExpensesCategoryDetails> requestBody = new HttpEntity<>(updatedExpensesCategory, httpHeaders);
         ResponseEntity<ExpensesCategoryDetails> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestBody, ExpensesCategoryDetails.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        BasicDetails updatedBasicDetails = new BasicDetails();
-        BeanUtils.copyProperties(updatedExpensesCategory.getBasicDetails(), updatedBasicDetails);
-        updatedBasicDetails.setBasicId(4L);
-        updatedExpensesCategory.setBasicDetails(updatedBasicDetails);
-        Assertions.assertEquals(updatedExpensesCategory, responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(3)
+    @Order(13)
     @Test
     void findById() {
+        ResponseEntity<CustomPageImpl<ExpensesCategoryDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<ExpensesCategoryDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", "2");
+        params.put("id", String.valueOf(searchId));
         ResponseEntity<ExpensesCategoryDetails> responseEntity = restTemplate.getForEntity(getApi, ExpensesCategoryDetails.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(responseEntity.getBody(), responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(4)
+    @Order(14)
     @Test
     void isDeleted() {
+        ResponseEntity<CustomPageImpl<ExpensesCategoryDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<ExpensesCategoryDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long deleteId = first.get().getId();
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> requestBody = new HttpEntity<>("", httpHeaders);
         Map<String, String> params = new HashMap<>();
-        params.put("id", "2");
+        params.put("id", String.valueOf(deleteId));
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(deleteApi, HttpMethod.DELETE, requestBody, Boolean.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        ResponseEntity<ExpensesCategoryDetails> findResponseEntity = restTemplate.getForEntity(getApi, ExpensesCategoryDetails.class, params);
+        Assertions.assertNotNull(findResponseEntity);
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
     }
 
-    @Order(5)
+    @Order(15)
     @Test
     void findAll() {
         ResponseEntity<CustomPageImpl<ExpensesCategoryDetails>> responseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {

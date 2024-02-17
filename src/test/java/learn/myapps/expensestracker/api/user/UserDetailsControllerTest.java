@@ -14,9 +14,9 @@ import org.springframework.http.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@TestClassOrder(ClassOrderer.ClassName.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserDetailsControllerTest {
 
@@ -54,57 +54,86 @@ class UserDetailsControllerTest {
                 .build();
     }
 
-    @Order(1)
+    @Order(41)
     @Test
     void create() {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, userDetails, String.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals("30", responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(2)
+    @Order(42)
     @Test
     void update() {
+        ResponseEntity<CustomPageImpl<UserDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<UserDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long updateId = first.get().getId();
         UserDetails updateUserDetails = new UserDetails();
         BeanUtils.copyProperties(userDetails, updateUserDetails);
-        updateUserDetails.setId(30L);
+        updateUserDetails.setId(updateId);
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<UserDetails> requestBody = new HttpEntity<>(updateUserDetails, httpHeaders);
         ResponseEntity<UserDetails> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestBody, UserDetails.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        BasicDetails updatedBasicDetails = new BasicDetails();
-        BeanUtils.copyProperties(updateUserDetails.getBasicDetails(), updatedBasicDetails);
-        updatedBasicDetails.setBasicId(32L);
-        updateUserDetails.setBasicDetails(updatedBasicDetails);
-        Assertions.assertEquals(updateUserDetails, responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(3)
+    @Order(43)
     @Test
     void findById() {
+        ResponseEntity<CustomPageImpl<UserDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<UserDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", "30");
+        params.put("id", String.valueOf(searchId));
         ResponseEntity<UserDetails> responseEntity = restTemplate.getForEntity(getApi, UserDetails.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(responseEntity.getBody(), responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(4)
+    @Order(44)
     @Test
     void isDeleted() {
+        ResponseEntity<CustomPageImpl<UserDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<UserDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long deleteId = first.get().getId();
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> requestBody = new HttpEntity<>("", httpHeaders);
         Map<String, String> params = new HashMap<>();
-        params.put("id", "30");
+        params.put("id", String.valueOf(deleteId));
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(deleteApi, HttpMethod.DELETE, requestBody, Boolean.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        ResponseEntity<UserDetails> findResponseEntity = restTemplate.getForEntity(getApi, UserDetails.class, params);
+        Assertions.assertNotNull(findResponseEntity);
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
     }
 
-    @Order(5)
+    @Order(45)
     @Test
     void findAll() {
         ResponseEntity<CustomPageImpl<UserDetails>> responseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {

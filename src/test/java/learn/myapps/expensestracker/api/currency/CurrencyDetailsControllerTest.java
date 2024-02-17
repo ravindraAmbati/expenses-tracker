@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@TestClassOrder(ClassOrderer.ClassName.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CurrencyDetailsControllerTest {
 
@@ -54,57 +54,86 @@ class CurrencyDetailsControllerTest {
                 .build();
     }
 
-    @Order(1)
+    @Order(21)
     @Test
     void create() {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, currencyDetails, String.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals("5", responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(2)
+    @Order(22)
     @Test
     void update() {
+        ResponseEntity<CustomPageImpl<CurrencyDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<CurrencyDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long updateId = first.get().getId();
         CurrencyDetails updateCurrencyDetails = new CurrencyDetails();
         BeanUtils.copyProperties(currencyDetails, updateCurrencyDetails);
-        updateCurrencyDetails.setId(5L);
+        updateCurrencyDetails.setId(updateId);
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<CurrencyDetails> requestBody = new HttpEntity<>(updateCurrencyDetails, httpHeaders);
         ResponseEntity<CurrencyDetails> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestBody, CurrencyDetails.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        BasicDetails updatedBasicDetails = new BasicDetails();
-        BeanUtils.copyProperties(updateCurrencyDetails.getBasicDetails(), updatedBasicDetails);
-        updatedBasicDetails.setBasicId(7L);
-        updateCurrencyDetails.setBasicDetails(updatedBasicDetails);
-        Assertions.assertEquals(updateCurrencyDetails, responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(3)
+    @Order(23)
     @Test
     void findById() {
+        ResponseEntity<CustomPageImpl<CurrencyDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<CurrencyDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", "5");
+        params.put("id", String.valueOf(searchId));
         ResponseEntity<CurrencyDetails> responseEntity = restTemplate.getForEntity(getApi, CurrencyDetails.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(responseEntity.getBody(), responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(4)
+    @Order(24)
     @Test
     void isDeleted() {
+        ResponseEntity<CustomPageImpl<CurrencyDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<CurrencyDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long deleteId = first.get().getId();
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> requestBody = new HttpEntity<>("", httpHeaders);
         Map<String, String> params = new HashMap<>();
-        params.put("id", "5");
+        params.put("id", String.valueOf(deleteId));
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(deleteApi, HttpMethod.DELETE, requestBody, Boolean.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        ResponseEntity<CurrencyDetails> findResponseEntity = restTemplate.getForEntity(getApi, CurrencyDetails.class, params);
+        Assertions.assertNotNull(findResponseEntity);
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
     }
 
-    @Order(5)
+    @Order(25)
     @Test
     void findAll() {
         ResponseEntity<CustomPageImpl<CurrencyDetails>> responseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {

@@ -1,15 +1,19 @@
 package learn.myapps.expensestracker.api.payment;
 
 import learn.myapps.expensestracker.api.basic.BasicDetails;
+import learn.myapps.expensestracker.api.expenses.ExpensesDetails;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PaymentModeDetailsRepoTest {
 
     @Autowired
@@ -37,17 +41,24 @@ class PaymentModeDetailsRepoTest {
         paymentModeDetailsRepo.deleteAll();
     }
 
-    @Order(1)
+    @Order(101)
     @Test
     void findById() {
         //when
         paymentModeDetailsRepo.save(paymentModeDetails);
-        Optional<PaymentModeDetails> actual = paymentModeDetailsRepo.findById(45L);
+        Iterable<PaymentModeDetails> all = paymentModeDetailsRepo.findAll();
+        Optional<PaymentModeDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long searchId = first.get().getId();
+        Optional<PaymentModeDetails> actual = paymentModeDetailsRepo.findById(searchId);
         //then
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(paymentModeDetails, actual.get());
     }
 
+    @Order(102)
     @Test
     void create() {
         //when
@@ -57,6 +68,7 @@ class PaymentModeDetailsRepoTest {
         Assertions.assertEquals(paymentModeDetails, actual);
     }
 
+    @Order(103)
     @Test
     void update() {
         //when
@@ -69,14 +81,22 @@ class PaymentModeDetailsRepoTest {
         Assertions.assertEquals(paymentMode, actual.getPaymentMode());
     }
 
-    @Order(2)
+    @Order(104)
     @Test
     void deleteById() {
         //when
         paymentModeDetailsRepo.save(paymentModeDetails);
-        Optional<PaymentModeDetails> actual = paymentModeDetailsRepo.findById(47L);
+        Iterable<PaymentModeDetails> all = paymentModeDetailsRepo.findAll();
+        Optional<PaymentModeDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long deleteId = first.get().getId();
+        Optional<PaymentModeDetails> actual = paymentModeDetailsRepo.findById(deleteId);
         //then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(paymentModeDetails, actual.get());
+        paymentModeDetailsRepo.deleteById(deleteId);
+        actual = paymentModeDetailsRepo.findById(deleteId);
+        Assertions.assertFalse(actual.isPresent());
     }
 }

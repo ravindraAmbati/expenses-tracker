@@ -1,16 +1,20 @@
 package learn.myapps.expensestracker.api.currency;
 
 import learn.myapps.expensestracker.api.basic.BasicDetails;
+import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CurrencyDetailsRepoTest {
 
     @Autowired
@@ -36,17 +40,24 @@ class CurrencyDetailsRepoTest {
         currencyDetailsRepo.deleteAll();
     }
 
-    @Order(1)
+    @Order(81)
     @Test
     void findById() {
         //when
         currencyDetailsRepo.save(currencyDetails);
-        Optional<CurrencyDetails> actual = currencyDetailsRepo.findById(13L);
+        Iterable<CurrencyDetails> all = currencyDetailsRepo.findAll();
+        Optional<CurrencyDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long searchId = first.get().getId();
+        Optional<CurrencyDetails> actual = currencyDetailsRepo.findById(searchId);
         //then
         Assertions.assertTrue(actual.isPresent());
         Assertions.assertEquals(currencyDetails, actual.get());
     }
 
+    @Order(82)
     @Test
     void create() {
         //when
@@ -56,6 +67,7 @@ class CurrencyDetailsRepoTest {
         Assertions.assertEquals(currencyDetails, actual);
     }
 
+    @Order(83)
     @Test
     void update() {
         //when
@@ -67,14 +79,22 @@ class CurrencyDetailsRepoTest {
         Assertions.assertEquals(updatedExchangeRate, actual.getExchangeRate());
     }
 
-    @Order(2)
+    @Order(84)
     @Test
     void deleteById() {
         //when
         currencyDetailsRepo.save(currencyDetails);
-        Optional<CurrencyDetails> actual = currencyDetailsRepo.findById(15L);
+        Iterable<CurrencyDetails> all = currencyDetailsRepo.findAll();
+        Optional<CurrencyDetails> first = StreamSupport.stream(all.spliterator(), false).findFirst();
+        Assertions.assertNotNull(first);
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Long deleteId = first.get().getId();
+        Optional<CurrencyDetails> actual = currencyDetailsRepo.findById(deleteId);
         //then
         Assertions.assertTrue(actual.isPresent());
-        Assertions.assertEquals(currencyDetails, actual.get());
+        currencyDetailsRepo.deleteById(deleteId);
+        actual = currencyDetailsRepo.findById(deleteId);
+        Assertions.assertFalse(actual.isPresent());
     }
 }

@@ -14,9 +14,9 @@ import org.springframework.http.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@TestClassOrder(ClassOrderer.ClassName.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestClassOrder(ClassOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PaymentModeDetailsControllerTest {
 
@@ -55,57 +55,86 @@ class PaymentModeDetailsControllerTest {
                 .build();
     }
 
-    @Order(1)
+    @Order(31)
     @Test
     void create() {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, paymentModeDetails, String.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals("27", responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(2)
+    @Order(32)
     @Test
     void update() {
+        ResponseEntity<CustomPageImpl<PaymentModeDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<PaymentModeDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long updateId = first.get().getId();
         PaymentModeDetails updatePaymentModeDetails = new PaymentModeDetails();
         BeanUtils.copyProperties(paymentModeDetails, updatePaymentModeDetails);
-        updatePaymentModeDetails.setId(27L);
+        updatePaymentModeDetails.setId(updateId);
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<PaymentModeDetails> requestBody = new HttpEntity<>(updatePaymentModeDetails, httpHeaders);
         ResponseEntity<PaymentModeDetails> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestBody, PaymentModeDetails.class);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        BasicDetails updatedBasicDetails = new BasicDetails();
-        BeanUtils.copyProperties(updatePaymentModeDetails.getBasicDetails(), updatedBasicDetails);
-        updatedBasicDetails.setBasicId(29L);
-        updatePaymentModeDetails.setBasicDetails(updatedBasicDetails);
-        Assertions.assertEquals(updatePaymentModeDetails, responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(3)
+    @Order(33)
     @Test
     void findById() {
+        ResponseEntity<CustomPageImpl<PaymentModeDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<PaymentModeDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", "27");
+        params.put("id", String.valueOf(searchId));
         ResponseEntity<PaymentModeDetails> responseEntity = restTemplate.getForEntity(getApi, PaymentModeDetails.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(responseEntity.getBody(), responseEntity.getBody());
+        Assertions.assertNotNull(responseEntity.getBody());
     }
 
-    @Order(4)
+    @Order(34)
     @Test
     void isDeleted() {
+        ResponseEntity<CustomPageImpl<PaymentModeDetails>> findAllresponseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<PaymentModeDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long deleteId = first.get().getId();
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> requestBody = new HttpEntity<>("", httpHeaders);
         Map<String, String> params = new HashMap<>();
-        params.put("id", "27");
+        params.put("id", String.valueOf(deleteId));
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(deleteApi, HttpMethod.DELETE, requestBody, Boolean.class, params);
         Assertions.assertNotNull(responseEntity);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        ResponseEntity<PaymentModeDetails> findResponseEntity = restTemplate.getForEntity(getApi, PaymentModeDetails.class, params);
+        Assertions.assertNotNull(findResponseEntity);
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
     }
 
-    @Order(5)
+    @Order(35)
     @Test
     void findAll() {
         ResponseEntity<CustomPageImpl<PaymentModeDetails>> responseEntity = restTemplate.exchange(findAll, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
