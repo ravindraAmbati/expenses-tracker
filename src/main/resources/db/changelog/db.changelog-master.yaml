@@ -27,3 +27,15 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/history/tables/create-table-payment-mode-details.sql
   - include:
       file: classpath:/db/changelog/changes/history/tables/create-table-user-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/triggers/tables/create-trigger-basic-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/triggers/tables/create-trigger-currency-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/triggers/tables/create-trigger-expenses-category-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/triggers/tables/create-trigger-expenses-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/triggers/tables/create-trigger-payment-mode-details.sql
+  - include:
+      file: classpath:/db/changelog/changes/triggers/tables/create-trigger-user-details.sql
