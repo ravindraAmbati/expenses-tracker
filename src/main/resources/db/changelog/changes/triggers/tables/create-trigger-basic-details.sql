@@ -2,7 +2,7 @@
 
 -- changeset ravindra.ambati:20240218001 labels:v2024.02.18 context:postgres
 -- preconditions onFail:HALT onError:HALT
-CREATE OR REPLACE FUNCTION f_basic_details() RETURNS TRIGGER AS '
+CREATE OR REPLACE FUNCTION expenses_tracker.f_basic_details() RETURNS TRIGGER AS '
     DECLARE
 	tmp_record_pair_id BIGINT;
 	BEGIN
@@ -27,4 +27,4 @@ CREATE OR REPLACE FUNCTION f_basic_details() RETURNS TRIGGER AS '
 -- preconditions onFail:HALT onError:HALT
 CREATE OR REPLACE TRIGGER t_basic_details
 AFTER INSERT OR UPDATE OR DELETE ON expenses_tracker.basic_details
-    FOR EACH ROW EXECUTE FUNCTION f_basic_details();
+    FOR EACH ROW EXECUTE FUNCTION expenses_tracker.f_basic_details();
