@@ -1,6 +1,8 @@
 package learn.myapps.expensestracker.api.user;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.ApiService;
+import learn.myapps.expensestracker.util.CustomAssert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,7 +34,7 @@ public class UserDetailsService implements ApiService<UserDetails> {
     }
 
     @Override
-    public UserDetails update(UserDetails userDetails) {
+    public UserDetails update(UserDetails userDetails) throws ResourceNotFoundException {
         Assert.notNull(userDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
         Assert.notNull(userDetails.getId(), ID_NULL_CHECK_ERROR_MESSAGE);
         findById(userDetails.getId());
@@ -50,10 +52,10 @@ public class UserDetailsService implements ApiService<UserDetails> {
     }
 
     @Override
-    public UserDetails findById(Long id) {
+    public UserDetails findById(Long id) throws ResourceNotFoundException {
         Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         Optional<UserDetails> retrievedUserDetails = userDetailsRepo.findById(id);
-        Assert.isTrue(retrievedUserDetails.isPresent(), MessageFormat.format("Searched User Details Entity is not found of the id: {0}", id));
+        CustomAssert.isResourcePresent(retrievedUserDetails.isPresent(), MessageFormat.format("Searched User Details Entity is not found of the id: {0}", id));
         return retrievedUserDetails.get();
     }
 

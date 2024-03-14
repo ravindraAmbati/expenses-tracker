@@ -1,6 +1,8 @@
 package learn.myapps.expensestracker.api.currency;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.ApiService;
+import learn.myapps.expensestracker.util.CustomAssert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,7 +34,7 @@ public class CurrencyDetailsService implements ApiService<CurrencyDetails> {
     }
 
     @Override
-    public CurrencyDetails update(CurrencyDetails currencyDetails) {
+    public CurrencyDetails update(CurrencyDetails currencyDetails) throws ResourceNotFoundException {
         Assert.notNull(currencyDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
         Assert.notNull(currencyDetails.getId(), ID_NULL_CHECK_ERROR_MESSAGE);
         findById(currencyDetails.getId());
@@ -50,10 +52,10 @@ public class CurrencyDetailsService implements ApiService<CurrencyDetails> {
     }
 
     @Override
-    public CurrencyDetails findById(Long id) {
+    public CurrencyDetails findById(Long id) throws ResourceNotFoundException {
         Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         Optional<CurrencyDetails> retrievedExpensesCategory = currencyDetailsRepo.findById(id);
-        Assert.isTrue(retrievedExpensesCategory.isPresent(), MessageFormat.format("Searched Currency Details Entity is not found of the id: {0}", id));
+        CustomAssert.isResourcePresent(retrievedExpensesCategory.isPresent(), MessageFormat.format("Searched Currency Details Entity is not found of the id: {0}", id));
         return retrievedExpensesCategory.get();
     }
 

@@ -1,5 +1,6 @@
 package learn.myapps.expensestracker.api.category;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,7 +80,7 @@ class ExpensesCategoryDetailsServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws ResourceNotFoundException {
         Mockito.when(expensesCategoryDetailsRepo.findById(11L)).thenReturn(Optional.of(expensesCategoryDetails));
         Mockito.when(expensesCategoryDetailsRepo.save(expensesCategoryDetails)).thenReturn(expensesCategoryDetails);
         ExpensesCategoryDetails createdExpensesCategoryDetails = expensesCategoryDetailsService.update(expensesCategoryDetails);
@@ -123,7 +124,7 @@ class ExpensesCategoryDetailsServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws ResourceNotFoundException {
         Mockito.when(expensesCategoryDetailsRepo.findById(10L)).thenReturn(Optional.of(expensesCategoryDetails));
         ExpensesCategoryDetails retrievedExpensesCategoryDetails = expensesCategoryDetailsService.findById(10L);
         Assertions.assertEquals(expensesCategoryDetails, retrievedExpensesCategoryDetails);
@@ -132,8 +133,8 @@ class ExpensesCategoryDetailsServiceTest {
     @Test
     void findByIdFail() {
         Mockito.when(expensesCategoryDetailsRepo.findById(10L)).thenReturn(Optional.empty());
-        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> expensesCategoryDetailsService.findById(10L), "");
-        Assertions.assertEquals("Searched Expenses Category Details Entity is not found of the id: 10", illegalArgumentException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> expensesCategoryDetailsService.findById(10L), "");
+        Assertions.assertEquals("Searched Expenses Category Details Entity is not found of the id: 10", resourceNotFoundException.getMessage());
     }
 
     @Test

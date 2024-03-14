@@ -1,6 +1,8 @@
 package learn.myapps.expensestracker.api.category;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.ApiService;
+import learn.myapps.expensestracker.util.CustomAssert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,7 +34,7 @@ public class ExpensesCategoryDetailsService implements ApiService<ExpensesCatego
     }
 
     @Override
-    public ExpensesCategoryDetails update(ExpensesCategoryDetails expensesCategoryDetails) {
+    public ExpensesCategoryDetails update(ExpensesCategoryDetails expensesCategoryDetails) throws ResourceNotFoundException {
         Assert.notNull(expensesCategoryDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
         Assert.notNull(expensesCategoryDetails.getId(), ID_NULL_CHECK_ERROR_MESSAGE);
         findById(expensesCategoryDetails.getId());
@@ -50,10 +52,10 @@ public class ExpensesCategoryDetailsService implements ApiService<ExpensesCatego
     }
 
     @Override
-    public ExpensesCategoryDetails findById(Long id) {
+    public ExpensesCategoryDetails findById(Long id) throws ResourceNotFoundException {
         Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         Optional<ExpensesCategoryDetails> retrievedExpensesCategory = expensesCategoryDetailsRepo.findById(id);
-        Assert.isTrue(retrievedExpensesCategory.isPresent(), MessageFormat.format("Searched Expenses Category Details Entity is not found of the id: {0}", id));
+        CustomAssert.isResourcePresent(retrievedExpensesCategory.isPresent(), MessageFormat.format("Searched Expenses Category Details Entity is not found of the id: {0}", id));
         return retrievedExpensesCategory.get();
     }
 

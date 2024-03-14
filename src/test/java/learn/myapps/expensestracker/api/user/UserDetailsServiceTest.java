@@ -1,5 +1,6 @@
 package learn.myapps.expensestracker.api.user;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,7 +80,7 @@ class UserDetailsServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws ResourceNotFoundException {
         Mockito.when(userDetailsRepo.findById(41L)).thenReturn(Optional.of(userDetails));
         Mockito.when(userDetailsRepo.save(userDetails)).thenReturn(userDetails);
         UserDetails createdCurrencyDetails = userDetailsService.update(userDetails);
@@ -123,7 +124,7 @@ class UserDetailsServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws ResourceNotFoundException {
         Mockito.when(userDetailsRepo.findById(41L)).thenReturn(Optional.of(userDetails));
         UserDetails retrievedCurrencyDetails = userDetailsService.findById(41L);
         Assertions.assertEquals(userDetails, retrievedCurrencyDetails);
@@ -132,8 +133,8 @@ class UserDetailsServiceTest {
     @Test
     void findByIdFail() {
         Mockito.when(userDetailsRepo.findById(41L)).thenReturn(Optional.empty());
-        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> userDetailsService.findById(41L), "");
-        Assertions.assertEquals("Searched User Details Entity is not found of the id: 41", illegalArgumentException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> userDetailsService.findById(41L), "");
+        Assertions.assertEquals("Searched User Details Entity is not found of the id: 41", resourceNotFoundException.getMessage());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package learn.myapps.expensestracker.api.basic;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,7 @@ class BasicDetailsServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws ResourceNotFoundException {
         Mockito.when(basicDetailsRepo.findById(1L)).thenReturn(Optional.of(basicDetails));
         Mockito.when(basicDetailsRepo.save(basicDetails)).thenReturn(basicDetails);
         BasicDetails createdBasicDetails = basicDetailsService.update(basicDetails);
@@ -114,7 +115,7 @@ class BasicDetailsServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws ResourceNotFoundException {
         Mockito.when(basicDetailsRepo.findById(1L)).thenReturn(Optional.of(basicDetails));
         BasicDetails retrievedBasicDetails = basicDetailsService.findById(1L);
         Assertions.assertEquals(basicDetails, retrievedBasicDetails);
@@ -123,8 +124,8 @@ class BasicDetailsServiceTest {
     @Test
     void findByIdFail() {
         Mockito.when(basicDetailsRepo.findById(1L)).thenReturn(Optional.empty());
-        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> basicDetailsService.findById(1L), "");
-        Assertions.assertEquals("Searched basic details entity is not found of the id: 1", illegalArgumentException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> basicDetailsService.findById(1L), "");
+        Assertions.assertEquals("Searched basic details entity is not found of the id: 1", resourceNotFoundException.getMessage());
     }
 
     @Test

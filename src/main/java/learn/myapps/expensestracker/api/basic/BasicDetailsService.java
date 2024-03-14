@@ -1,6 +1,8 @@
 package learn.myapps.expensestracker.api.basic;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.ApiService;
+import learn.myapps.expensestracker.util.CustomAssert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,7 +33,7 @@ public class BasicDetailsService implements ApiService<BasicDetails> {
     }
 
     @Override
-    public BasicDetails update(BasicDetails basicDetails) {
+    public BasicDetails update(BasicDetails basicDetails) throws ResourceNotFoundException {
         Assert.notNull(basicDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
         Assert.notNull(basicDetails.getBasicId(), ID_NULL_CHECK_ERROR_MESSAGE);
         findById(basicDetails.getBasicId());
@@ -49,10 +51,10 @@ public class BasicDetailsService implements ApiService<BasicDetails> {
     }
 
     @Override
-    public BasicDetails findById(Long id) {
+    public BasicDetails findById(Long id) throws ResourceNotFoundException {
         Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         Optional<BasicDetails> retrievedBasicDetails = basicDetailsRepo.findById(id);
-        Assert.isTrue(retrievedBasicDetails.isPresent(), MessageFormat.format("Searched basic details entity is not found of the id: {0}", id));
+        CustomAssert.isResourcePresent(retrievedBasicDetails.isPresent(), MessageFormat.format("Searched basic details entity is not found of the id: {0}", id));
         return retrievedBasicDetails.get();
     }
 

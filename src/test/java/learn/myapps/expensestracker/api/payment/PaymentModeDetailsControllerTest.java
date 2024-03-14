@@ -131,7 +131,7 @@ class PaymentModeDetailsControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         ResponseEntity<PaymentModeDetails> findResponseEntity = restTemplate.getForEntity(getApi, PaymentModeDetails.class, params);
         Assertions.assertNotNull(findResponseEntity);
-        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, findResponseEntity.getStatusCode());
     }
 
     @Order(35)

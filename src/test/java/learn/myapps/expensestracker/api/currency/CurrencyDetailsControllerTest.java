@@ -130,7 +130,7 @@ class CurrencyDetailsControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         ResponseEntity<CurrencyDetails> findResponseEntity = restTemplate.getForEntity(getApi, CurrencyDetails.class, params);
         Assertions.assertNotNull(findResponseEntity);
-        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, findResponseEntity.getStatusCode());
     }
 
     @Order(25)

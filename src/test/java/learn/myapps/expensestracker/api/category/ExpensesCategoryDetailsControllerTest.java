@@ -129,7 +129,7 @@ class ExpensesCategoryDetailsControllerTest {
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         ResponseEntity<ExpensesCategoryDetails> findResponseEntity = restTemplate.getForEntity(getApi, ExpensesCategoryDetails.class, params);
         Assertions.assertNotNull(findResponseEntity);
-        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, findResponseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, findResponseEntity.getStatusCode());
     }
 
     @Order(15)

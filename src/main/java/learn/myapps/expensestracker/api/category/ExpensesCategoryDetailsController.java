@@ -1,11 +1,13 @@
 package learn.myapps.expensestracker.api.category;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.ApiController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/api/v1/category")
 @RestController
@@ -27,13 +29,21 @@ public class ExpensesCategoryDetailsController implements ApiController<Expenses
     @PutMapping
     @Override
     public ExpensesCategoryDetails update(@RequestBody ExpensesCategoryDetails expensesCategoryDetails) {
-        return expensesCategoryDetailsService.update(expensesCategoryDetails);
+        try {
+            return expensesCategoryDetailsService.update(expensesCategoryDetails);
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping(value = "/{id}")
     @Override
     public ExpensesCategoryDetails findById(@PathVariable("id") Long id) {
-        return expensesCategoryDetailsService.findById(id);
+        try {
+            return expensesCategoryDetailsService.findById(id);
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @DeleteMapping(value = "/{id}")

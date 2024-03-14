@@ -1,5 +1,6 @@
 package learn.myapps.expensestracker.api.currency;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,7 +80,7 @@ class CurrencyDetailsServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws ResourceNotFoundException {
         Mockito.when(currencyDetailsRepo.findById(21L)).thenReturn(Optional.of(currencyDetails));
         Mockito.when(currencyDetailsRepo.save(currencyDetails)).thenReturn(currencyDetails);
         CurrencyDetails createdCurrencyDetails = currencyDetailsService.update(currencyDetails);
@@ -123,7 +124,7 @@ class CurrencyDetailsServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws ResourceNotFoundException {
         Mockito.when(currencyDetailsRepo.findById(20L)).thenReturn(Optional.of(currencyDetails));
         CurrencyDetails retrievedCurrencyDetails = currencyDetailsService.findById(20L);
         Assertions.assertEquals(currencyDetails, retrievedCurrencyDetails);
@@ -132,8 +133,8 @@ class CurrencyDetailsServiceTest {
     @Test
     void findByIdFail() {
         Mockito.when(currencyDetailsRepo.findById(20L)).thenReturn(Optional.empty());
-        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> currencyDetailsService.findById(20L), "");
-        Assertions.assertEquals("Searched Currency Details Entity is not found of the id: 20", illegalArgumentException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> currencyDetailsService.findById(20L), "");
+        Assertions.assertEquals("Searched Currency Details Entity is not found of the id: 20", resourceNotFoundException.getMessage());
     }
 
     @Test

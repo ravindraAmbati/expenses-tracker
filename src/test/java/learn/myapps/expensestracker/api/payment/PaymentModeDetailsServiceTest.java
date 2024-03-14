@@ -1,5 +1,6 @@
 package learn.myapps.expensestracker.api.payment;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,7 +81,7 @@ class PaymentModeDetailsServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws ResourceNotFoundException {
         Mockito.when(paymentModeDetailsRepo.findById(31L)).thenReturn(Optional.of(paymentModeDetails));
         Mockito.when(paymentModeDetailsRepo.save(paymentModeDetails)).thenReturn(paymentModeDetails);
         PaymentModeDetails createdCurrencyDetails = paymentModeDetailsService.update(paymentModeDetails);
@@ -124,7 +125,7 @@ class PaymentModeDetailsServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws ResourceNotFoundException {
         Mockito.when(paymentModeDetailsRepo.findById(30L)).thenReturn(Optional.of(paymentModeDetails));
         PaymentModeDetails retrievedCurrencyDetails = paymentModeDetailsService.findById(30L);
         Assertions.assertEquals(paymentModeDetails, retrievedCurrencyDetails);
@@ -133,8 +134,8 @@ class PaymentModeDetailsServiceTest {
     @Test
     void findByIdFail() {
         Mockito.when(paymentModeDetailsRepo.findById(30L)).thenReturn(Optional.empty());
-        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> paymentModeDetailsService.findById(30L), "");
-        Assertions.assertEquals("Searched Payment Mode Details Entity is not found of the id: 30", illegalArgumentException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentModeDetailsService.findById(30L), "");
+        Assertions.assertEquals("Searched Payment Mode Details Entity is not found of the id: 30", resourceNotFoundException.getMessage());
     }
 
     @Test

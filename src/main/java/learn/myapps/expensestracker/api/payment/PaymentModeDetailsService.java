@@ -1,6 +1,8 @@
 package learn.myapps.expensestracker.api.payment;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.ApiService;
+import learn.myapps.expensestracker.util.CustomAssert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,7 +34,7 @@ public class PaymentModeDetailsService implements ApiService<PaymentModeDetails>
     }
 
     @Override
-    public PaymentModeDetails update(PaymentModeDetails paymentModeDetails) {
+    public PaymentModeDetails update(PaymentModeDetails paymentModeDetails) throws ResourceNotFoundException {
         Assert.notNull(paymentModeDetails, ENTITY_NULL_CHECK_ERROR_MESSAGE);
         Assert.notNull(paymentModeDetails.getId(), ID_NULL_CHECK_ERROR_MESSAGE);
         findById(paymentModeDetails.getId());
@@ -50,10 +52,10 @@ public class PaymentModeDetailsService implements ApiService<PaymentModeDetails>
     }
 
     @Override
-    public PaymentModeDetails findById(Long id) {
+    public PaymentModeDetails findById(Long id) throws ResourceNotFoundException {
         Assert.notNull(id, ID_NULL_CHECK_ERROR_MESSAGE);
         Optional<PaymentModeDetails> retrievedExpensesCategory = paymentModeDetailsRepo.findById(id);
-        Assert.isTrue(retrievedExpensesCategory.isPresent(), MessageFormat.format("Searched Payment Mode Details Entity is not found of the id: {0}", id));
+        CustomAssert.isResourcePresent(retrievedExpensesCategory.isPresent(), MessageFormat.format("Searched Payment Mode Details Entity is not found of the id: {0}", id));
         return retrievedExpensesCategory.get();
     }
 

@@ -1,5 +1,6 @@
 package learn.myapps.expensestracker.api.expenses;
 
+import learn.myapps.expensestracker.Exception.ResourceNotFoundException;
 import learn.myapps.expensestracker.api.basic.BasicDetails;
 import learn.myapps.expensestracker.api.category.ExpensesCategoryDetails;
 import learn.myapps.expensestracker.api.currency.CurrencyDetails;
@@ -118,7 +119,7 @@ class ExpensesDetailsServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws ResourceNotFoundException {
         Mockito.when(expensesDetailsRepo.findById(55L)).thenReturn(Optional.of(expensesDetails));
         Mockito.when(expensesDetailsRepo.save(expensesDetails)).thenReturn(expensesDetails);
         ExpensesDetails createdCurrencyDetails = expensesDetailsService.update(expensesDetails);
@@ -162,7 +163,7 @@ class ExpensesDetailsServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws ResourceNotFoundException {
         Mockito.when(expensesDetailsRepo.findById(55L)).thenReturn(Optional.of(expensesDetails));
         ExpensesDetails retrievedCurrencyDetails = expensesDetailsService.findById(55L);
         Assertions.assertEquals(expensesDetails, retrievedCurrencyDetails);
@@ -171,8 +172,8 @@ class ExpensesDetailsServiceTest {
     @Test
     void findByIdFail() {
         Mockito.when(expensesDetailsRepo.findById(55L)).thenReturn(Optional.empty());
-        IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> expensesDetailsService.findById(55L), "");
-        Assertions.assertEquals("Searched Expenses Details Entity is not found of the id: 55", illegalArgumentException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> expensesDetailsService.findById(55L), "");
+        Assertions.assertEquals("Searched Expenses Details Entity is not found of the id: 55", resourceNotFoundException.getMessage());
     }
 
     @Test
