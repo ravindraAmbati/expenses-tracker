@@ -59,4 +59,12 @@ public class BasicDetailsController implements ApiController<BasicDetails> {
                                       @RequestParam(name = "sort", defaultValue = "basicId") String sortBy) {
         return basicDetailsService.findAll(pageNumber, pageSize, Sort.by(sortBy));
     }
+
+    @GetMapping
+    public Page<BasicDetails> search(@RequestParam(value = "search") String search,
+                                     @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                     @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                     @RequestParam(name = "sort", defaultValue = "basicId") String sortBy) {
+        return basicDetailsService.search(search, pageNumber, pageSize, Sort.by(sortBy));
+    }
 }

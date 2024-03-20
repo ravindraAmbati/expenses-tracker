@@ -15,4 +15,6 @@ public interface ApiController<T> {
 
     Page<T> findAll(int pageNumber, int pageSize, String sortBy);
 
+    Page<T> search(String search, int pageNumber, int pageSize, String sortBy);
+
 }

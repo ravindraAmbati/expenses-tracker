@@ -59,4 +59,13 @@ public class ExpensesDetailsController implements ApiController<ExpensesDetails>
                                          @RequestParam(name = "sort", defaultValue = "id") String sortBy) {
         return expensesDetailsService.findAll(pageNumber, pageSize, Sort.by(sortBy));
     }
+
+    @GetMapping
+    @Override
+    public Page<ExpensesDetails> search(@RequestParam(value = "search") String search,
+                                        @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                        @RequestParam(name = "sort", defaultValue = "id") String sortBy) {
+        return expensesDetailsService.search(search, pageNumber, pageSize, Sort.by(sortBy));
+    }
 }

@@ -143,4 +143,26 @@ class PaymentModeDetailsControllerTest {
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertNotNull(responseEntity.getBody().getContent());
     }
+
+    @Order(59)
+    @Test
+    void search() {
+        final String search = url + "?search=paymentMode==card";
+        ResponseEntity<CustomPageImpl<PaymentModeDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<PaymentModeDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(searchId));
+        ResponseEntity<PaymentModeDetails> responseEntity = restTemplate.getForEntity(getApi, PaymentModeDetails.class, params);
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertNotNull(responseEntity.getBody());
+    }
 }

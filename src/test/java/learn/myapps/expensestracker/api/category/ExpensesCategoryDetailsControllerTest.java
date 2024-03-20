@@ -141,4 +141,26 @@ class ExpensesCategoryDetailsControllerTest {
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertNotNull(responseEntity.getBody().getContent());
     }
+
+    @Order(57)
+    @Test
+    void search() {
+        final String search = url + "?search=expensesCategory==education";
+        ResponseEntity<CustomPageImpl<ExpensesCategoryDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<ExpensesCategoryDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(searchId));
+        ResponseEntity<ExpensesCategoryDetails> responseEntity = restTemplate.getForEntity(getApi, ExpensesCategoryDetails.class, params);
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertNotNull(responseEntity.getBody());
+    }
 }

@@ -142,4 +142,26 @@ class UserDetailsControllerTest {
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertNotNull(responseEntity.getBody().getContent());
     }
+
+    @Order(60)
+    @Test
+    void search() {
+        final String search = url + "?search=firstName==Ravindra,lastName==ambati";
+        ResponseEntity<CustomPageImpl<UserDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<UserDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(searchId));
+        ResponseEntity<UserDetails> responseEntity = restTemplate.getForEntity(getApi, UserDetails.class, params);
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertNotNull(responseEntity.getBody());
+    }
 }

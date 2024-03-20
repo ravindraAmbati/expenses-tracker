@@ -59,4 +59,13 @@ public class CurrencyDetailsController implements ApiController<CurrencyDetails>
                                          @RequestParam(name = "sort", defaultValue = "id") String sortBy) {
         return currencyDetailsService.findAll(pageNumber, pageSize, Sort.by(sortBy));
     }
+
+    @GetMapping
+    @Override
+    public Page<CurrencyDetails> search(@RequestParam(value = "search") String search,
+                                        @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                        @RequestParam(name = "sort", defaultValue = "id") String sortBy) {
+        return currencyDetailsService.search(search, pageNumber, pageSize, Sort.by(sortBy));
+    }
 }

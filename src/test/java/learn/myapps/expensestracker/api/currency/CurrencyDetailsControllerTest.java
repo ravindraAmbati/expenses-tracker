@@ -142,4 +142,26 @@ class CurrencyDetailsControllerTest {
         Assertions.assertNotNull(responseEntity.getBody());
         Assertions.assertNotNull(responseEntity.getBody().getContent());
     }
+
+    @Order(58)
+    @Test
+    void search() {
+        final String search = url + "?search=exchangeRate>90";
+        ResponseEntity<CustomPageImpl<CurrencyDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+        Assertions.assertNotNull(findAllresponseEntity);
+        Assertions.assertNotNull(findAllresponseEntity.getBody());
+        Assertions.assertNotNull(findAllresponseEntity.getBody().getContent());
+        Optional<CurrencyDetails> first = findAllresponseEntity.getBody().getContent().stream().findFirst();
+        Assertions.assertTrue(first.isPresent());
+        Assertions.assertNotNull(first.get());
+        Assertions.assertNotNull(first.get().getId());
+        long searchId = first.get().getId();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(searchId));
+        ResponseEntity<CurrencyDetails> responseEntity = restTemplate.getForEntity(getApi, CurrencyDetails.class, params);
+        Assertions.assertNotNull(responseEntity);
+        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        Assertions.assertNotNull(responseEntity.getBody());
+    }
 }

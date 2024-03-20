@@ -28,6 +28,10 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
+	implementation 'com.querydsl:querydsl-core:5.1.0'
+	implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+	implementation 'com.querydsl:querydsl-apt:5.1.0:jakarta'
+
 	testCompileOnly 'org.projectlombok:lombok:1.18.30'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }

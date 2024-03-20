@@ -16,4 +16,6 @@ public interface ApiService<T> {
 
     Page<T> findAll(int page, int size, Sort sort);
 
+    Page<T> search(String search, int page, int size, Sort sort);
+
 }

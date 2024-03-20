@@ -59,4 +59,13 @@ public class UserDetailsController implements ApiController<UserDetails> {
                                      @RequestParam(name = "sort", defaultValue = "id") String sortBy) {
         return userDetailsService.findAll(pageNumber, pageSize, Sort.by(sortBy));
     }
+
+    @GetMapping
+    @Override
+    public Page<UserDetails> search(@RequestParam(value = "search") String search,
+                                    @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                    @RequestParam(name = "sort", defaultValue = "id") String sortBy) {
+        return userDetailsService.search(search, pageNumber, pageSize, Sort.by(sortBy));
+    }
 }
