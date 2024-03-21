@@ -75,16 +75,11 @@ public class PaymentModeDetailsService implements ApiService<PaymentModeDetails>
 
     public Page<PaymentModeDetails> search(String search, int pageNumber, int pageSize, Sort sort) {
         List<SearchCriteria> searchCriteriaList = SearchCriteriaBuilder.buildSearchCriteria(search);
+        validateSearchCriteria(searchCriteriaList, PaymentModeDetails.class.getDeclaredFields());
         PredicateBuilder predicateBuilder = new PredicateBuilder(searchCriteriaList);
         BooleanExpression exp = predicateBuilder.build(paymentModeDetailsPathBuilder);
         Page<PaymentModeDetails> all = paymentModeDetailsRepo.findAll(exp, PageRequest.of(pageNumber, pageSize, sort));
         validatePageResults(pageNumber, pageSize, sort, all);
         return all;
-    }
-
-    private static void validatePageResults(int pageNumber, int pageSize, Sort sort, Page<PaymentModeDetails> all) {
-        Assert.isTrue(pageNumber == all.getNumber(), MessageFormat.format("Failed to get requested Payment Mode Details Entities from page number: {0}", pageNumber));
-        Assert.isTrue(pageSize == all.getSize(), MessageFormat.format("Failed to get requested Payment Mode Details Entities of page size: {0}", pageSize));
-        Assert.isTrue(sort.equals(all.getSort()), MessageFormat.format("Failed to get requested Payment Mode Details Entities by sort: {0}", sort));
     }
 }

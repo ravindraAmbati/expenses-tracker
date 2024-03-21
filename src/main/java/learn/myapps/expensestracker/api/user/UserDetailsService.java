@@ -74,16 +74,11 @@ public class UserDetailsService implements ApiService<UserDetails> {
 
     public Page<UserDetails> search(String search, int pageNumber, int pageSize, Sort sort) {
         List<SearchCriteria> searchCriteriaList = SearchCriteriaBuilder.buildSearchCriteria(search);
+        validateSearchCriteria(searchCriteriaList, UserDetails.class.getDeclaredFields());
         PredicateBuilder predicateBuilder = new PredicateBuilder(searchCriteriaList);
         BooleanExpression exp = predicateBuilder.build(userDetailsPathBuilder);
         Page<UserDetails> all = userDetailsRepo.findAll(exp, PageRequest.of(pageNumber, pageSize, sort));
         validatePageResults(pageNumber, pageSize, sort, all);
         return all;
-    }
-
-    private static void validatePageResults(int pageNumber, int pageSize, Sort sort, Page<UserDetails> all) {
-        Assert.isTrue(pageNumber == all.getNumber(), MessageFormat.format("Failed to get requested User Details Entity from page number: {0}", pageNumber));
-        Assert.isTrue(pageSize == all.getSize(), MessageFormat.format("Failed to get requested User Details Entity of page size: {0}", pageSize));
-        Assert.isTrue(sort.equals(all.getSort()), MessageFormat.format("Failed to get requested User Details Entity by sort: {0}", sort));
     }
 }

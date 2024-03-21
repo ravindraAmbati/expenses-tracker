@@ -146,7 +146,7 @@ class UserDetailsControllerTest {
     @Order(60)
     @Test
     void search() {
-        final String search = url + "?search=firstName==Ravindra,lastName==ambati";
+        final String search = url + "?search=firstName%Ravindra,lastName==ambati,emailId%outlook";
         ResponseEntity<CustomPageImpl<UserDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
         });
         Assertions.assertNotNull(findAllresponseEntity);

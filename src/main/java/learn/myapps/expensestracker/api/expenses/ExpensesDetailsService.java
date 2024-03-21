@@ -74,16 +74,11 @@ public class ExpensesDetailsService implements ApiService<ExpensesDetails> {
 
     public Page<ExpensesDetails> search(String search, int pageNumber, int pageSize, Sort sort) {
         List<SearchCriteria> searchCriteriaList = SearchCriteriaBuilder.buildSearchCriteria(search);
+        validateSearchCriteria(searchCriteriaList, ExpensesDetails.class.getDeclaredFields());
         PredicateBuilder predicateBuilder = new PredicateBuilder(searchCriteriaList);
         BooleanExpression exp = predicateBuilder.build(expensesDetailsPathBuilder);
         Page<ExpensesDetails> all = expensesDetailsRepo.findAll(exp, PageRequest.of(pageNumber, pageSize, sort));
         validatePageResults(pageNumber, pageSize, sort, all);
         return all;
-    }
-
-    private static void validatePageResults(int pageNumber, int pageSize, Sort sort, Page<ExpensesDetails> all) {
-        Assert.isTrue(pageNumber == all.getNumber(), MessageFormat.format("Failed to get requested Expenses Details Entities from page number: {0}", pageNumber));
-        Assert.isTrue(pageSize == all.getSize(), MessageFormat.format("Failed to get requested Expenses Details Entities of page size: {0}", pageSize));
-        Assert.isTrue(sort.equals(all.getSort()), MessageFormat.format("Failed to get requested Expenses Details Entities by sort: {0}", sort));
     }
 }

@@ -149,20 +149,20 @@ class PaymentModeDetailsServiceTest {
     void findAllPageNumberFail() {
         Mockito.when(paymentModeDetailsRepo.findAll(PageRequest.of(0, 10, Sort.by("id")))).thenReturn(Page.empty(PageRequest.of(1, 10, Sort.by("id"))));
         IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> paymentModeDetailsService.findAll(0, 10, Sort.by("id")), "");
-        Assertions.assertEquals("Failed to get requested Payment Mode Details Entities from page number: 0", illegalArgumentException.getMessage());
+        Assertions.assertEquals("Failed to get requested entities from page number: 0", illegalArgumentException.getMessage());
     }
 
     @Test
     void findAllPageSizeFail() {
         Mockito.when(paymentModeDetailsRepo.findAll(PageRequest.of(0, 10, Sort.by("id")))).thenReturn(Page.empty(PageRequest.of(0, 11, Sort.by("id"))));
         IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> paymentModeDetailsService.findAll(0, 10, Sort.by("id")), "");
-        Assertions.assertEquals("Failed to get requested Payment Mode Details Entities of page size: 10", illegalArgumentException.getMessage());
+        Assertions.assertEquals("Failed to get requested entities of page size: 10", illegalArgumentException.getMessage());
     }
 
     @Test
     void findAllSortFail() {
         Mockito.when(paymentModeDetailsRepo.findAll(PageRequest.of(0, 10, Sort.by("id")))).thenReturn(Page.empty(PageRequest.of(0, 10, Sort.by("description"))));
         IllegalArgumentException illegalArgumentException = Assertions.assertThrows(IllegalArgumentException.class, () -> paymentModeDetailsService.findAll(0, 10, Sort.by("id")), "");
-        Assertions.assertEquals("Failed to get requested Payment Mode Details Entities by sort: id: ASC", illegalArgumentException.getMessage());
+        Assertions.assertEquals("Failed to get requested entities by sort: id: ASC", illegalArgumentException.getMessage());
     }
 }

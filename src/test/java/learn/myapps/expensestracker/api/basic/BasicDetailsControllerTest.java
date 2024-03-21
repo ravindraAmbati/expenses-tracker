@@ -138,7 +138,7 @@ class BasicDetailsControllerTest {
     @Order(56)
     @Test
     void search() {
-        final String search = url + "?search=lastUpdatedBy==Ravindra";
+        final String search = url + "?search=lastUpdatedBy==Ravindra,description%test";
         ResponseEntity<CustomPageImpl<BasicDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
         });
         Assertions.assertNotNull(findAllresponseEntity);

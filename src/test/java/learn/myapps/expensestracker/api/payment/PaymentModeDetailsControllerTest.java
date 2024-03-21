@@ -147,7 +147,7 @@ class PaymentModeDetailsControllerTest {
     @Order(59)
     @Test
     void search() {
-        final String search = url + "?search=paymentMode==card";
+        final String search = url + "?search=paymentMode==card,upiDetails%upi";
         ResponseEntity<CustomPageImpl<PaymentModeDetails>> findAllresponseEntity = restTemplate.exchange(search, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
         });
         Assertions.assertNotNull(findAllresponseEntity);
